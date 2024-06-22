@@ -1,0 +1,17 @@
+version: "3"
+services:
+  mymongo:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+
+  myreader:
+    build: .
+    depends_on:
+      - mymongo
+    ports:
+      - "8002:8000"
+    environment:
+      MONGO_DB_HOST: mymongo
+      MONGO_DB_PORT: 27017
+      MONGO_DB_NAME: poke_images
