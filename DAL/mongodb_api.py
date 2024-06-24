@@ -4,6 +4,7 @@ from gridfs import GridFS
 from pymongo import MongoClient
 from utils import get_pokemon_image, store_image_in_mongo, store_image_in_folder, get_pokemon_id, retrieve_image_data_by_poke_name, save_image
 from dotenv import load_dotenv
+from fastapi import HTTPException
 
 load_dotenv()
 
@@ -51,8 +52,8 @@ class MongoAPI:
             print("initializing database finished")
             return True
         except Exception as e:
-            print(f"Error in initializing database\n{e}")
-            return False
+            raise HTTPException(status_code=404, detail=f"Error in initializing database\n{e}")
+
 
     def add_image(self, poke_name):
         # check if image exist
@@ -67,13 +68,9 @@ class MongoAPI:
                 print(f"{poke_name} image added successfully")
                 return True
             else:
-                # print(f"{poke_name} pokemon name not valid")
-                msg = f"{poke_name} pokemon name not valid"
-                return msg
+                raise HTTPException(status_code=404, detail=f"{poke_name} pokemon name not valid")
         else:
-            # print(f"{poke_name} image already exist in mongodb!")
-            msg = f"{poke_name} image already exist in mongodb!"
-            return msg
+            raise HTTPException(status_code=409, detail=f"{poke_name} pokemon name already exist")
 
 
     def replace_image(self, poke_name, new_image_url):
@@ -86,7 +83,7 @@ class MongoAPI:
             store_image_in_mongo(self.fs, poke_id, poke_name)
             return True
         else:
-            return False
+            raise HTTPException(status_code=404, detail=f"{poke_name} pokemon name do not exist in database")
 
     def get_image_data(self, poke_name):
         image_data = retrieve_image_data_by_poke_name(self.db, self.fs, poke_name)
@@ -94,7 +91,7 @@ class MongoAPI:
             print(f"{poke_name} image data retrieved successfully")
             return image_data
         else:
-            print(f"{poke_name} image data not found, double check pokemon name!")
+            raise HTTPException(status_code=404, detail=f"{poke_name} image data not found, double check pokemon name!")
 
     def show_image(self, poke_name):
         try:
@@ -115,6 +112,6 @@ class MongoAPI:
                 self.db['fs.chunks'].delete_one({"files_id": poke_id})
                 return True
             else:
-                return False
+                raise HTTPException(status_code=404, detail=f"{poke_name} pokemon name do not exist in database")
         except Exception as e:
-            print(f"Error in deleting data. \n{e}")
+            raise HTTPException(status_code=400, detail=f"{e}")
