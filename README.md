@@ -4,7 +4,7 @@ This service is part of a microservice architecture project. It acts as a FastAP
 
 ## Gateway Project
 For more details on the entire microservice architecture, refer to :
-[gateway project](LINK_TO_GATEWAY_PROJECT).
+[gateway project](https://github.com/Janamawasy/getaway-poke-service/tree/master).
 
 ## Features
 
