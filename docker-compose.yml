@@ -10,7 +10,7 @@ services:
     depends_on:
       - mymongo
     ports:
-      - "8002:8000"
+      - "8002:8002"
     environment:
       MONGO_DB_HOST: mymongo
       MONGO_DB_PORT: 27017
