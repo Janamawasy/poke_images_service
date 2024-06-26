@@ -14,6 +14,10 @@ For more details on the entire microservice architecture, refer to :
 - Update an existing Pokemon image
 - Display a Pokemon image
 
+## endpoints
+![Description of the image](/images-endpoint.png)
+
+
 ## Technologies Used
 
 - Python
